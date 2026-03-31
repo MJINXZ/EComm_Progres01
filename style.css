@@ -6,10 +6,12 @@
     margin: 0; 
     box-sizing: border-box;
 }
-.navbar-brand{
+.navbar-brand{    
     font-size: 2rem;
     color: black;
     font-family: "Lobster", sans-serif;
+    display: block;       /* ensure it behaves like a block element */
+    margin-bottom: 0.5rem; /* small space below "Login" */
 }
 .navbar-brand:hover{
     color: black;
@@ -76,4 +78,61 @@
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0px 0px 15px rgba(0,0,0,0.1);
+}
+.login {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden; /* ensures blur doesn’t overflow */
+}
+
+.login::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('./Images/Top_Viewclair.jpg') no-repeat center center;
+    background-size: cover;
+    filter: blur(8px); /* adjust blur intensity */
+    z-index: 0; /* behind content */
+}
+
+.login > * {
+    position: relative;
+    z-index: 1; /* ensures content stays above blur */
+}
+
+.login form {
+    position: relative;
+    z-index: 2; /* ensures form sits above the overlay */
+    background: rgba(255,255,255,0.9); /* semi-transparent white */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+}
+@media (max-width: 768px) {
+    .login form {
+        width: 90%;
+        padding: 20px;
+    }
+}
+.our_products {
+    font-family: 'Lobster', cursive;  /* change font */
+    font-size: 40px;                     /* change size */
+    color: #38b338;                      /* change color */
+    font-weight: bold;                   /* bold */
+    text-align: center;                  /* center text */
+    letter-spacing: 2px;                 /* spacing between letters */
+}
+.vary_custom_sell {
+    font-family: 'Rubik', sans-serif;  /* change font */
+    font-size: 15px;                     /* change size */
+    color: #572e2e;                      /* change color */
+    font-weight: bold;                   /* bold */
+    text-align: center;                  /* center text */
+    letter-spacing: 2px;                 /* spacing between letters */
 }
