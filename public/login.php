@@ -1,9 +1,10 @@
 <?php
   /*  connector */
+session_start();
+$pageClass = "login-page";
+  include('./admin/includes/header.php');
+  include('./admin/includes/topbar.php');
 
-  include('../admin/includes/header.php');
-  include('../admin/includes/topbar.php');
-  session_start();
 
   
 ?>  
@@ -21,7 +22,9 @@
 
         <form method="POST" enctype="multipart/form-data" autocomplete="off" novalidate action="/E-commerce/app/controllers/loginController.php" >
 
-          <input type="text" class="form-control mb-3" placeholder="Username"  name="username">
+          <input type="text" class="form-control mb-3" placeholder="Username"  name="username" required>
+          <div class="invalid-feedback"> enter your name hoy </div> 
+
           <input type="password" class="form-control mb-3" placeholder="Password"  name="password">
           <button type ="submit" class="btn1 w-100 mb-3" name="login">Login</button>
 
@@ -61,8 +64,8 @@ if (isset($_SESSION['message']) && $_SESSION['code'] != ""){
     </script>
 
 <?php
-  unset($_session['message']);
-  unset($_session['code']);
+  unset($_SESSION['message']);
+  unset($_SESSION['code']);
 }
 ?>
 

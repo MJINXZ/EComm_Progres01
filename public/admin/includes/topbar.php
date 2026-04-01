@@ -1,51 +1,77 @@
- <nav class="navbar navbar-expand-lg">
+<?php
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
+
+
+<nav class="navbar navbar-expand-lg">
   <div class="container">
-    <a class="navbar-brand" href="#">Sweet!</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+
+    <!-- Always show logo -->
+    <a class="navbar-brand" href="/E-commerce/public/users/index">Sweet!</a>
+
+<?php if ($current_page != 'login.php' && $current_page != 'register.php') { ?>
+
+  
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarScroll">
       <ul class="navbar-nav m-auto my-2 my-lg-0">
 
         <li class="nav-item">
-          <a class="nav-link active"href="#">Home</a>
+          <a class="nav-link active" href="/E-commerce/public/users/index">Home</a>
         </li>
+
         <li class="nav-item">
-          <a class="nav-link" href="logout.php">Logout</a>
+          <a class="nav-link" href="#">Contact Us</a>
         </li>
+
         <li class="nav-item">
-                    <?php
-                    if (isset($_SESSION['UID'])) {
-                    ?>
-                        <div class="nav-item dropdown">
-                            <a class="nav-link nav-change dropdown-toggle"  id="dropdownLink"  href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 1.2rem;">
-                                <?php echo $_SESSION['userName']; ?>
-                            </a>
-                            <div class="dropdown-menu dropdown-style" aria-labelledby="navbarDropdown">
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item logout-txt" href="Logout.php" style="font-size: 1.2rem;">Logout</a>
-                            </div>
-                        </div>
-                    <?php
-                    } else {
-                    ?>
-                        <a class="nav-link nav-change " href="login.php" style="font-size: 1.2rem;">Sign In</a>
-                    <?php
-                    }
-                    ?>
-                </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Order</a>
+          <a class="nav-link" href="#">Best Seller</a>
         </li>
-         <li class="nav-item">
+
+        <li class="nav-item">
+          <a class="nav-link" href="/E-commerce/public/order">Order</a>
+        </li>
+
+        <li class="nav-item">
           <a class="nav-link" href="#">About</a>
         </li>
+
       </ul>
 
-      <form class="d-flex">
-        <input class="px-2 search" type="search" placeholder="Search" aria-label="Search"/>
-        <button class="btn0" type="submit">Search</button>
+      <form method="POST" action="/E-commerce/app/controllers/userController.php" class="d-flex">
+
+      <?php if (isset($_SESSION['user_id'])) { ?>
+
+        <div class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+            <?php echo $_SESSION['authUser']['username']; ?>
+          </a>
+
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="Profile.php">Profile</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <button type="submit" name="logout" class="dropdown-item">Sign out</button>
+            </li>
+          </ul>
+        </div>
+
+      <?php } else { ?>
+
+        <a class="nav-link" href="/E-commerce/public/login.php">Sign In</a>
+
+      <?php } ?>
+
       </form>
     </div>
+
+    <?php } ?>
+
   </div>
 </nav>
+
+
