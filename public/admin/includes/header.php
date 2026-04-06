@@ -20,6 +20,10 @@
 <link rel="stylesheet" href="/E-commerce/public/assets/css/topbar.css">
 <link rel="stylesheet" href="/E-commerce/public/assets/css/card.css">
 <link rel="stylesheet" href="/E-commerce/public/assets/css/auth.css">
+
+
+
+
    <title>SweetShop!</title>
   </head>
 <body class="<?= $pageClass ?? '' ?>">

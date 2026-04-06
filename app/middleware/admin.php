@@ -1,20 +1,20 @@
 <?php 
-
 session_start();
-include_once("../config/config.php");
+include_once(__DIR__ . "/../../app/config/config.php");
+
 
 if(!isset($_SESSION['authUser'])){
     $_SESSION['message'] = "Go login lah";
     $_SESSION['code'] = "warning";
-         header("Location: /E-commerce/public/login");
+         header("Location: /E-commerce/public/users/login");
             exit();
 
-}else {
+} else {
 
-if($_SESSION['role'] !== 'admin'){
+if($_SESSION['userRole'] !== 'admin'){
     $_SESSION['message'] = "no permission ";
     $_SESSION['code'] = "warning";
-         header("Location: /E-commerce/public/login");
+         header("Location: /E-commerce/public/users/index");
             exit();
 
 }

@@ -31,7 +31,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: url("../img/eclair_coffee.jpg") no-repeat center center;
+  background: url("../img/Top_Viewclair.jpg") no-repeat center center;
   background-size: cover;
   filter: blur(8px); /* adjust blur intensity */
   z-index: 0; /* behind content */
@@ -51,13 +51,55 @@
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
 }
 
+.register-page .login form {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+
+.register-page .login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden; /* ensures blur doesn’t overflow */
+}
 .register-page .btn1 {
   height: 45px;
   width: 35%;
   border: none;
   outline: none;
   background-color: rgb(9, 214, 88);
-  color: white;
+
   font-weight: 700;
   border-radius: 60px;
+}
+
+.register-page .login::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("../img/Top_Viewclair.jpg") no-repeat center center;
+  background-size: cover;
+  filter: blur(8px); /* adjust blur intensity */
+  z-index: 0; /* behind content */
+}
+
+.register-page .login > * {
+  position: relative;
+  z-index: 1; /* ensures content stays above blur */
+}
+
+.register-page .login form {
+  position: relative;
+  z-index: 2; /* ensures form sits above the overlay */
+  background: rgba(255, 255, 255, 0.9); /* semi-transparent white */
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
 }

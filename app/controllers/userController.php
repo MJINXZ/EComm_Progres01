@@ -8,7 +8,7 @@ if(isset($_POST['logout'])){
     unset($_SESSION['user_id']);
     unset($_SESSION['role']);
     session_destroy();
-      header("Location:/E-commerce/public/users/index.php");
+      header("Location:/E-commerce/public/users/index");
             exit(0);
 }
 ?>
