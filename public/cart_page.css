@@ -1,0 +1,112 @@
+@font-face {
+  font-family: "Coffee";
+  src: url("../fonts/CoffeeShopDemo-Regular.otf") format("opentype");
+}
+
+.cart-layout {
+  display: flex;
+  gap: 40px;
+  margin-top: 60px;
+}
+
+.cart-left {
+  flex: 2;
+  border: 2px solid #28c966;
+  background: #f1f1f1;
+  padding: 20px;
+}
+
+.cart-right {
+  flex: 1;
+}
+
+.checkout-box {
+  border: 2px solid #28c966;
+  padding: 30px;
+  background: #f9f9f9;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  padding: 10px;
+  color: white;
+  background: #09d658;
+}
+
+td {
+  padding: 10px;
+}
+
+/* Cart info */
+.cart-info {
+  display: flex;
+  gap: 15px;
+}
+
+td img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+
+td input {
+  width: 60px;
+  height: 35px;
+}
+
+td a {
+  color: red;
+  text-decoration: none;
+}
+
+p {
+  font-size: 18px;
+  color: #ff523b;
+}
+
+/* Checkout button */
+.checkout-btn {
+  width: 100%;
+  padding: 15px;
+  background: #2ecc71;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.checkout-btn:hover {
+  background: #27ae60;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .cart-layout {
+    flex-direction: column;
+  }
+}
+.subtotal-row {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-left: 20px;
+}
+.tax-row {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-left: 20px;
+}
+.total-row.total-final {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-left: 20px;
+}
