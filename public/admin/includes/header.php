@@ -20,6 +20,10 @@
 <link rel="stylesheet" href="/E-commerce/public/assets/css/topbar.css">
 <link rel="stylesheet" href="/E-commerce/public/assets/css/card.css">
 <link rel="stylesheet" href="/E-commerce/public/assets/css/auth.css">
+<link rel="stylesheet" href="assets/css/cart_page.css">
+<link rel="stylesheet" href="/E-commerce/public/assets/css/product_page.css">
+<link rel="stylesheet" href="/E-commerce/public/assets/css/footer.css">
+
 
 
 

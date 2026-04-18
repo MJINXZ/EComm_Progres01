@@ -1,113 +1,167 @@
 <?php 
 session_start();
-$pageClass = "index-page";
+$pageClass = "product-page";
 include('./admin/includes/header.php');
 include('./admin/includes/topbar.php');
 include_once("../app/config/config.php");
 
 if(isset($_GET['id'])) {
-    $id = $_GET['id'];
 
-    $query = "SELECT id, productName, productDescription, price, img FROM product_item WHERE id = '$id'";
+    $id = mysqli_real_escape_string($conn, $_GET['id']);
+
+    $query = "SELECT id, productName, productDescription, price, img 
+              FROM product_item 
+              WHERE id = '$id'";
+
     $result = mysqli_query($conn, $query);
+    
+    if(!$result) {
+        echo "Database error: " . mysqli_error($conn);
+        exit();
+    }
+    
     $product = mysqli_fetch_assoc($result);
+
+    if(!$product){
+        echo "Product not found";
+        exit();
+    }
+
+} else {
+    echo "No Product Selected";
+    exit();
 }
 ?>
 
-<section class="banner">
-<div class="container py-5">
-<div class="container-fluid">
-  <div class="row" style="min-height: 400px;">
-   
-    <div class="col-md-7">
 
-      <img src="assets/product_img/<?php echo $product['img']; ?>" 
-           id="Productimg" 
-           class="product-img" 
-           alt="Product Image">
+
+<div class="product-container">
+
+
+    <div class="left">
+        <div class="discount-badge">🔥 35% OFF</div>
+        <div class="image-wrapper">
+            <img src="assets/product_img/<?php echo htmlspecialchars($product['img']); ?>" alt="<?php echo htmlspecialchars($product['productName']); ?>">
+        </div>
     </div>
 
-    <div class="col-md-5 d-flex flex-column align-items-start ps-5 pt-5">
-      <h2 class="new"><?php echo $product['productName']; ?></h2>
-      <br>
-      <p><?php echo $product['productDescription']; ?></p>
 
-  <div class="add-to-cart">
-    <div class="quantity-container">   
-      
-        <form method="POST" class="d-flex align-items-center gap-2" action="/E-commerce/app/controllers/cartController.php">
-    
-            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+    <div class="right">
 
+        <div class="brand">Premium Collection</div>
         
-            <button type="button" onclick="decrementQuantity()">-</button>
+        <div class="title">
+            <?php echo htmlspecialchars($product['productName']); ?>
+        </div>
 
-    
-            <input type="number" name="quantity" id="quantity_input" value="1" min="1" style="width: 50px; text-align: center;">
+        <div class="price-section">
+            <?php 
+            $original_price = $product['price'];
+            $discount_percent = 35;
+            $discounted_price = $original_price * (1 - $discount_percent / 100);
+            ?>
+            <span class="price">$<?php echo number_format($discounted_price, 2); ?></span>
+            <span class="old-price">$<?php echo number_format($original_price, 2); ?></span>
+            <span class="discount-percent">SAVE <?php echo $discount_percent; ?>%</span>
+        </div>
 
-   
-            <button type="button" onclick="incrementQuantity()">+</button>
+        <div class="desc">
+            <?php echo nl2br(htmlspecialchars($product['productDescription'])); ?>
+        </div>
 
 
-            <button type="submit" name="add_to_cart">Add to Cart</button>
+        <div class="size-section">
+            <div class="label">Size:</div>
+            <div class="size-options" id="sizeOptions">
+                <button type="button" class="size-btn" data-size="S">S</button>
+                <button type="button" class="size-btn" data-size="M">M</button>
+                <button type="button" class="size-btn active" data-size="L">L</button>
+                <button type="button" class="size-btn" data-size="XL">XL</button>
+                <button type="button" class="size-btn" data-size="XXL">XXL</button>
+            </div>
+        </div>
+
+
+        <div class="color-section">
+            <div class="label">Color:</div>
+            <div class="color-options" id="colorOptions">
+                <div class="color-circle" style="background-color: #2c3e50;" data-color="Black"></div>
+                <div class="color-circle" style="background-color: #d4af37;" data-color="Gold"></div>
+                <div class="color-circle" style="background-color: #a55d35;" data-color="Brown"></div>
+                <div class="color-circle selected" style="background-color: #e67e22;" data-color="Orange"></div>
+            </div>
+        </div>
+
+        <div class="label">Quantity:</div>
+
+        <form method="POST" action="/E-commerce/app/controllers/cartController.php" id="cartForm">
+
+            <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
+            <input type="hidden" name="selected_size" id="selected_size" value="L">
+            <input type="hidden" name="selected_color" id="selected_color" value="Orange">
+
+            <div class="quantity-box">
+                <button type="button" onclick="decrementQuantity()">-</button>
+                <input type="number"
+                       name="quantity"
+                       id="quantity_input"
+                       value="1"
+                       min="1">
+                <button type="button" onclick="incrementQuantity()">+</button>
+            </div>
+
+            <button type="submit"
+                    name="add_to_cart"
+                    class="buy-btn">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+            </button>
+
         </form>
+
     </div>
 </div>
-                    </div>
-    </div>
-
-  </div>
-</div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-<script>
-    let quantity = 1; 
-
-   function incrementQuantity() {
-    let input = document.getElementById('quantity_input');
-    input.value = parseInt(input.value) + 1;
-}
-function decrementQuantity() {
-    let input = document.getElementById('quantity_input');
-    if(parseInt(input.value) > 1) {
-        input.value = parseInt(input.value) - 1;
-    }
-}
-
-    </script>
-
-
-<?php 
-if (isset($_SESSION['message']) && $_SESSION['code'] != ""){
-?>
-<script>
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmationButton: false,
-    timer: 3000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.onmouseenter = Swal.stopTimer;
-      toast.onmouseleave = Swal.resumeTimer;
-    }
-
-  });
-   Toast.fire({
-      icon: "<?php echo $_SESSION['code']; ?>",
-      title: "<?php echo $_SESSION['message']; ?>"
-    });
-    </script>
 
 <?php
-  unset($_SESSION['message']);
-  unset($_SESSION['code']);
-}
+include('./admin/includes/footer.php');
 ?>
 
+<script>
 
-</body>
+    function incrementQuantity() {
+        let input = document.getElementById("quantity_input");
+        let newVal = parseInt(input.value) + 1;
+        input.value = newVal;
+    }
+
+    function decrementQuantity() {
+        let input = document.getElementById("quantity_input");
+        if(parseInt(input.value) > 1){
+            input.value = parseInt(input.value) - 1;
+        }
+    }
+
+
+    const sizeBtns = document.querySelectorAll('.size-btn');
+    const selectedSizeInput = document.getElementById('selected_size');
+    
+    sizeBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            sizeBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            selectedSizeInput.value = this.getAttribute('data-size');
+        });
+    });
+
+
+    const colorCircles = document.querySelectorAll('.color-circle');
+    const selectedColorInput = document.getElementById('selected_color');
+    
+    colorCircles.forEach(circle => {
+        circle.addEventListener('click', function() {
+            colorCircles.forEach(c => c.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedColorInput.value = this.getAttribute('data-color');
+        });
+    });
+</script>
+

@@ -58,19 +58,19 @@ if ($stmt) {
             exit();
         }
          if ($userRole === 'user') {
-            header("Location: /E-commerce/public/users/index");
+            header("Location: /E-commerce/public/index");
             exit();
         }
     } else {
         $_SESSION['message'] = "Invalid username or password";
         $_SESSION['code'] = "error";
-        header("Location: /E-commerce/public/users/login");
+        header("Location: /E-commerce/public/login");
 exit();
     }
  }else {
         $_SESSION['message'] = "something went wrong";
         $_SESSION['code'] = "error";
-       header("Location: /E-commerce/public/users/login");
+       header("Location: /E-commerce/public/login");
 exit();
     }
 }
@@ -112,7 +112,7 @@ if(!filter_var($emailAddress, FILTER_VALIDATE_EMAIL)){
 
 
 
-    header("Location: /E-commerce/public/users/register");
+    header("Location: /E-commerce/public/register");
     exit();
 
 }
@@ -138,7 +138,7 @@ if($checkEmail && mysqli_num_rows($checkEmail) > 0 ) {
 
     $_SESSION['message'] ="Email address already exist";
     $_SESSION['code'] = "error";
-    header("Location: /E-commerce/public/users/register");
+    header("Location: /E-commerce/public/register");
     exit();
 
 }
@@ -160,7 +160,7 @@ if($checkUsername && mysqli_num_rows($checkUsername) > 0 ) {
 
     $_SESSION['message'] ="username already exist";
     $_SESSION['code'] = "error";
-    header("Location: /E-commerce/public/users/register");
+    header("Location: /E-commerce/public/register");
     exit();
 
 }
@@ -180,7 +180,7 @@ if($password !== $confirmPassword) {
 
     $_SESSION['message'] ="password does not match";
     $_SESSION['code'] = "error";
-    header("Location: /E-commerce/public/users/register");
+    header("Location: /E-commerce/public/register");
     exit();
 
 }
@@ -206,12 +206,12 @@ VALUES ('$uuid', '$firstName', '$lastName', '$middleName', '$emailAddress', '$co
 
     $_SESSION['message'] = "Registration Successful. Login now g";
     $_SESSION['code']= "success";
-    header("Location: /E-commerce/public/users/login");
+    header("Location: /E-commerce/public/login");
 exit();
  }else {
     $_SESSION['message'] ="something went wrong";
     $_SESSION['code'] = "error";
-    header("Location: /E-commerce/public/users/register");
+    header("Location: /E-commerce/public/register");
     exit();
 
 }

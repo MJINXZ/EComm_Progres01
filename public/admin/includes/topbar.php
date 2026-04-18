@@ -10,7 +10,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <?php if (isset($_SESSION['userRole']) && $_SESSION['userRole'] === 'admin') { ?>
       <a class="navbar-brand" href="/E-commerce/public/admin/index">Sweet!</a>
     <?php } else { ?>
-      <a class="navbar-brand" href="/E-commerce/public/users/index">Sweet!</a>
+      <a class="navbar-brand" href="/E-commerce/public/index">Sweet!</a>
     <?php } ?>
 
 <?php if ($current_page != 'login.php' && $current_page != 'register.php') { ?>
@@ -27,7 +27,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
          <?php if (isset($_SESSION['userRole']) && $_SESSION['userRole'] === 'admin') { ?>
           <a class="nav-link active" href="/E-commerce/public/admin/index">Home</a>
         <?php } else { ?>
-          <a class="nav-link active" href="/E-commerce/public/users/index">Home</a>
+          <a class="nav-link active" href="/E-commerce/public/index">Home</a>
         <?php } ?>
         </li>
 
@@ -91,7 +91,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
       <?php } else { ?>
 
-        <a class="nav-link" href="/E-commerce/public/users/login">Sign In</a>
+        <a class="nav-link" href="/E-commerce/public/login">Sign In</a>
 
       <?php } ?>
 

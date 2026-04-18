@@ -7,7 +7,7 @@ include_once("../app/config/config.php");
 
 
 $query = "SELECT id, productName, productDescription, price, img 
-               FROM product_item";
+               FROM product_item LIMIT 20";
 
 $result = mysqli_query($conn, $query);
 

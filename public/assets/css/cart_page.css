@@ -1,0 +1,170 @@
+@font-face {
+  font-family: "Coffee";
+  src: url("../fonts/CoffeeShopDemo-Regular.otf") format("opentype");
+}
+
+/* Layout */
+.cart-page .cart-layout {
+  display: flex;
+  gap: 40px;
+  margin-top: 60px;
+  align-items: flex-start;
+}
+
+/* LEFT SIDE */
+.cart-page .cart-left {
+  flex: 2;
+  border: 2px solid #28c966;
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+}
+
+/* RIGHT SIDE */
+.cart-page .cart-right {
+  flex: 1;
+}
+
+/* Checkout Box */
+.cart-page .checkout-box {
+  border: 2px solid #28c966;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Table */
+.cart-page table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+/* Header */
+.cart-page th {
+  text-align: left;
+  padding: 14px;
+  color: white;
+  background: linear-gradient(135deg, #09d658, #28c966);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Cells */
+.cart-page td {
+  padding: 15px 10px;
+  vertical-align: middle;
+  border-bottom: 1px solid #eaeaea;
+}
+
+/* Cart info */
+.cart-page .cart-info {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+/* Product Image */
+.cart-page td img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  transition: transform 0.3s ease;
+}
+
+.cart-page td img:hover {
+  transform: scale(1.05);
+}
+
+/* Quantity Input */
+.cart-page td input {
+  width: 60px;
+  height: 35px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+/* Remove Link */
+.cart-page td a {
+  color: #e74c3c;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.cart-page td a:hover {
+  text-decoration: underline;
+}
+
+/* Product Name */
+.cart-page p {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+/* Checkout button */
+.cart-page .checkout-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.cart-page .checkout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Totals */
+.cart-page .subtotal-row td,
+.tax-row td {
+  font-size: 16px;
+  font-weight: 500;
+  background: #fafafa;
+}
+
+.cart-page .total-row.total-final td {
+  font-size: 20px;
+  font-weight: bold;
+  background: #f1f3f5;
+  color: #000;
+}
+
+/* Inputs in checkout */
+.cart-page .checkout-box input {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  transition: 0.3s;
+}
+
+.cart-page .checkout-box input:focus {
+  border-color: #28c966;
+  box-shadow: 0 0 5px rgba(40, 201, 102, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .cart-layout {
+    flex-direction: column;
+  }
+
+  td img {
+    width: 70px;
+    height: 70px;
+  }
+}
+.cart-page body {
+  background: linear-gradient(135deg, #cdebd7, #f0e8e8);
+}
