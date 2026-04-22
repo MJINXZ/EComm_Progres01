@@ -1,66 +1,90 @@
-<?php
-// Receipt Page
-?>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4fff7;
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Receipt</title>
-  <link rel="stylesheet" href="receipt.css">
-</head>
-<body>
+/* MAIN RECEIPT BOX */
+.receipt {
+  width: 380px;
+  background: #ffffff;
+  border: 2px solid #b7e4c7;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
 
-<div class="receipt">
+/* HEADER */
+.header {
+  text-align: center;
+  border-bottom: 2px dashed #95d5b2;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
 
-  <!-- HEADER -->
-  <div class="header">
-    <h2>SweetShop</h2>
-    <p>Official Receipt</p>
-    <span class="badge">Paid</span>
-  </div>
+.header h2 {
+  margin: 0;
+  color: #2d6a4f;
+}
 
-  <!-- INFO -->
-  <div class="info">
-    <p><strong>Order ID:</strong> #EC20260422</p>
-    <p><strong>Date:</strong> April 22, 2026</p>
-    <p><strong>Customer:</strong> John Doe</p>
-  </div>
+.header p {
+  margin: 3px 0;
+  font-size: 12px;
+  color: #40916c;
+}
 
-  <!-- ITEMS -->
-  <table class="items">
-    <tr>
-      <th>Item</th>
-      <th>Qty</th>
-      <th>Price</th>
-    </tr>
+/* PAID BADGE */
+.badge {
+  background: #b7e4c7;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  display: inline-block;
+  margin-top: 8px;
+}
 
-    <tr>
-      <td>Chocolate Cake</td>
-      <td>1</td>
-      <td>$12.00</td>
-    </tr>
+/* INFO SECTION */
+.info {
+  font-size: 13px;
+  margin-bottom: 15px;
+  color: #333;
+}
 
-    <tr>
-      <td>Strawberry Eclair</td>
-      <td>2</td>
-      <td>$6.00</td>
-    </tr>
-  </table>
+/* TABLE */
+.items {
+  width: 100%;
+  font-size: 13px;
+  border-collapse: collapse;
+}
 
-  <!-- TOTAL -->
-  <div class="total">
-    <span>Total</span>
-    <span>$18.00</span>
-  </div>
+.items th,
+.items td {
+  text-align: left;
+  padding: 6px 0;
+}
 
-  <!-- FOOTER -->
-  <div class="footer">
-    Thank you for your purchase 💚<br>
-    www.sweetshop.com
-  </div>
+.items th {
+  color: #2d6a4f;
+  border-bottom: 1px solid #b7e4c7;
+}
 
-</div>
+/* TOTAL */
+.total {
+  margin-top: 15px;
+  border-top: 2px dashed #95d5b2;
+  padding-top: 10px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  color: #1b4332;
+}
 
-</body>
-</html>
+/* FOOTER */
+.footer {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 15px;
+  color: #40916c;
+}
