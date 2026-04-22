@@ -32,7 +32,7 @@
 
   <!-- RIGHT FORM -->
   <div class="profile-form">
-    <h2> Profile Settings</h2>
+    <h2>Profile Settings</h2>
 
     <div class="form-grid">
       <div>
@@ -84,16 +84,16 @@
 <!-- ORDER HISTORY -->
 <div class="order-history">
 
-  <h2> Order History</h2>
+  <h2>Order History</h2>
 
   <table>
     <thead>
       <tr>
         <th>Order ID</th>
         <th>Date</th>
-        <th>Items</th>
         <th>Total</th>
         <th>Status</th>
+        <th>Details</th>
       </tr>
     </thead>
 
@@ -101,25 +101,25 @@
       <tr>
         <td>#1001</td>
         <td>April 10, 2026</td>
-        <td>Chocolate Cake, Donuts</td>
         <td>$25.00</td>
         <td class="status delivered">Delivered</td>
+        <td><button class="details-btn">View</button></td>
       </tr>
 
       <tr>
         <td>#1002</td>
         <td>April 15, 2026</td>
-        <td>Cupcakes</td>
         <td>$12.00</td>
         <td class="status pending">Pending</td>
+        <td><button class="details-btn">View</button></td>
       </tr>
 
       <tr>
         <td>#1003</td>
         <td>April 18, 2026</td>
-        <td>Macarons Box</td>
         <td>$18.00</td>
         <td class="status cancelled">Cancelled</td>
+        <td><button class="details-btn">View</button></td>
       </tr>
     </tbody>
   </table>
