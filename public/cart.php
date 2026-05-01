@@ -1,11 +1,12 @@
 <?php 
 session_start();
 $pageClass = "cart-page";
+
 include('admin/includes/header.php');
 include('admin/includes/topbar.php');
 include_once("../app/config/config.php");
 
-
+// ================= USER INFO =================
 if (isset($_SESSION['user_id'])) {
 
     $user_id = $_SESSION['user_id'];
@@ -32,7 +33,6 @@ if (isset($_SESSION['user_id'])) {
 }
 ?>
 
-<!-- CSS -->
 <link rel="stylesheet" href="assets/css/cart_page.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -51,7 +51,6 @@ if (isset($_SESSION['user_id'])) {
 
 <?php
 $totalPrice = 0;
-
 
 if (isset($_SESSION['user_id'])) {
 
@@ -79,7 +78,7 @@ if (isset($_SESSION['user_id'])) {
 
         <div>
             <p><?php echo $row["productname"]; ?></p>
-            <small>Price: ₱<?php echo $row["price"]; ?></small><br><br>
+            <small>Price: ₱<?php echo number_format($row["price"], 2); ?></small><br><br>
 
             <button type="button"
                     class="remove-btn"
@@ -94,7 +93,7 @@ if (isset($_SESSION['user_id'])) {
     <input type="number" value="<?php echo $row["quantity"]; ?>">
 </td>
 
-<td>₱<?php echo $subtotal; ?></td>
+<td>₱<?php echo number_format($subtotal, 2); ?></td>
 </tr>
 
 <?php
@@ -104,9 +103,6 @@ if (isset($_SESSION['user_id'])) {
         echo '<tr><td colspan="3">Your cart is empty.</td></tr>';
     }
 
-/* =========================
-   GUEST CART
-========================= */
 } else {
 
     if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
@@ -131,7 +127,7 @@ if (isset($_SESSION['user_id'])) {
 
         <div>
             <p><?php echo $row["productName"]; ?></p>
-            <small>Price: ₱<?php echo $row["price"]; ?></small><br><br>
+            <small>Price: ₱<?php echo number_format($row["price"], 2); ?></small><br><br>
 
             <button type="button"
                     class="remove-btn"
@@ -146,7 +142,7 @@ if (isset($_SESSION['user_id'])) {
     <input type="number" value="<?php echo $quantity; ?>">
 </td>
 
-<td>₱<?php echo $subtotal; ?></td>
+<td>₱<?php echo number_format($subtotal, 2); ?></td>
 </tr>
 
 <?php
@@ -158,25 +154,25 @@ if (isset($_SESSION['user_id'])) {
     }
 }
 
-
-$tax = $totalPrice * 0.10;
+// ✅ TAX COMPUTATION
+$tax = $totalPrice * 0.12;
 $grandTotal = $totalPrice + $tax;
 ?>
 
-<!-- MATCHED WITH FRONTEND DESIGN -->
-<tr class="subtotal-row">
+<!-- TOTALS -->
+<tr>
     <td colspan="2"></td>
-    <td>Subtotal: ₱<?php echo $totalPrice; ?></td>
+    <td>Subtotal: ₱<?php echo number_format($totalPrice, 2); ?></td>
 </tr>
 
-<tr class="tax-row">
+<tr>
     <td colspan="2"></td>
-    <td>Tax (10%): ₱<?php echo $tax; ?></td>
+    <td>VAT (12%): ₱<?php echo number_format($tax, 2); ?></td>
 </tr>
 
-<tr class="total-row total-final">
+<tr>
     <td colspan="2"></td>
-    <td>Total: ₱<?php echo $grandTotal; ?></td>
+    <td><strong>Total: ₱<?php echo number_format($grandTotal, 2); ?></strong></td>
 </tr>
 
 </table>
@@ -189,8 +185,6 @@ $grandTotal = $totalPrice + $tax;
 
 <form method="POST" action="/E-commerce/app/controllers/checkoutController.php">
 
-<input type="hidden" name="action" value="saveTempCheckout">
-
 <h4>Address:</h4>
 <input type="text" name="address" class="form-control mb-3"
        value="<?php echo $address; ?>">
@@ -202,17 +196,11 @@ $grandTotal = $totalPrice + $tax;
 <h4>Form of Payment:</h4>
 <input type="text" name="payment_method" class="form-control mb-4">
 
-<h4>Add Extra Safety Packaging:</h4>
-<select name="packaging" class="form-control mb-4">
-    <option value="0">No</option>
-    <option value="20">Yes (+₱20)</option>
-</select>
-
 <h4>Total Price:</h4>
-<input name ="total" type="text" class="form-control mb-4"
-       value="₱<?php echo $grandTotal; ?>" readonly>
+<input name="total" type="text" class="form-control mb-4"
+       value="₱<?php echo number_format($grandTotal, 2); ?>" readonly>
 
-<button class="checkout-btn">CHECK OUT</button>
+<button type="submit" name="checkout" class="checkout-btn">CHECK OUT</button>
 
 </form>
 
@@ -220,7 +208,6 @@ $grandTotal = $totalPrice + $tax;
 </div>
 
 </div>
-
 
 <script>
 document.addEventListener('click', function(e) {

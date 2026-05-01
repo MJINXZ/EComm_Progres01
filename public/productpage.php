@@ -33,18 +33,14 @@ if(isset($_GET['id'])) {
 }
 ?>
 
-
-
 <div class="product-container">
 
-
     <div class="left">
-        <div class="discount-badge">🔥 35% OFF</div>
+        <!-- Discount badge removed -->
         <div class="image-wrapper">
             <img src="assets/product_img/<?php echo htmlspecialchars($product['img']); ?>" alt="<?php echo htmlspecialchars($product['productName']); ?>">
         </div>
     </div>
-
 
     <div class="right">
 
@@ -54,21 +50,14 @@ if(isset($_GET['id'])) {
             <?php echo htmlspecialchars($product['productName']); ?>
         </div>
 
+        <!-- Clean price (no discount) -->
         <div class="price-section">
-            <?php 
-            $original_price = $product['price'];
-            $discount_percent = 35;
-            $discounted_price = $original_price * (1 - $discount_percent / 100);
-            ?>
-            <span class="price">$<?php echo number_format($discounted_price, 2); ?></span>
-            <span class="old-price">$<?php echo number_format($original_price, 2); ?></span>
-            <span class="discount-percent">SAVE <?php echo $discount_percent; ?>%</span>
+            <span class="price">₱<?php echo number_format($product['price'], 2); ?></span>
         </div>
 
         <div class="desc">
             <?php echo nl2br(htmlspecialchars($product['productDescription'])); ?>
         </div>
-
 
         <div class="size-section">
             <div class="label">Size:</div>
@@ -80,7 +69,6 @@ if(isset($_GET['id'])) {
                 <button type="button" class="size-btn" data-size="XXL">XXL</button>
             </div>
         </div>
-
 
         <div class="color-section">
             <div class="label">Color:</div>
@@ -127,41 +115,39 @@ include('./admin/includes/footer.php');
 
 <script>
 
-    function incrementQuantity() {
-        let input = document.getElementById("quantity_input");
-        let newVal = parseInt(input.value) + 1;
-        input.value = newVal;
+function incrementQuantity() {
+    let input = document.getElementById("quantity_input");
+    let newVal = parseInt(input.value) + 1;
+    input.value = newVal;
+}
+
+function decrementQuantity() {
+    let input = document.getElementById("quantity_input");
+    if(parseInt(input.value) > 1){
+        input.value = parseInt(input.value) - 1;
     }
+}
 
-    function decrementQuantity() {
-        let input = document.getElementById("quantity_input");
-        if(parseInt(input.value) > 1){
-            input.value = parseInt(input.value) - 1;
-        }
-    }
+const sizeBtns = document.querySelectorAll('.size-btn');
+const selectedSizeInput = document.getElementById('selected_size');
 
-
-    const sizeBtns = document.querySelectorAll('.size-btn');
-    const selectedSizeInput = document.getElementById('selected_size');
-    
-    sizeBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            sizeBtns.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            selectedSizeInput.value = this.getAttribute('data-size');
-        });
+sizeBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+        sizeBtns.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        selectedSizeInput.value = this.getAttribute('data-size');
     });
+});
 
+const colorCircles = document.querySelectorAll('.color-circle');
+const selectedColorInput = document.getElementById('selected_color');
 
-    const colorCircles = document.querySelectorAll('.color-circle');
-    const selectedColorInput = document.getElementById('selected_color');
-    
-    colorCircles.forEach(circle => {
-        circle.addEventListener('click', function() {
-            colorCircles.forEach(c => c.classList.remove('selected'));
-            this.classList.add('selected');
-            selectedColorInput.value = this.getAttribute('data-color');
-        });
+colorCircles.forEach(circle => {
+    circle.addEventListener('click', function() {
+        colorCircles.forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedColorInput.value = this.getAttribute('data-color');
     });
+});
+
 </script>
-

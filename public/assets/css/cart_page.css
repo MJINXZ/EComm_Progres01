@@ -40,6 +40,7 @@
   border-collapse: collapse;
   overflow: hidden;
   border-radius: 10px;
+  background: transparent; /* FIX */
 }
 
 /* Header */
@@ -57,6 +58,7 @@
   padding: 15px 10px;
   vertical-align: middle;
   border-bottom: 1px solid #eaeaea;
+  background: transparent; /* FIX */
 }
 
 /* Cart info */
@@ -108,6 +110,38 @@
   margin-bottom: 5px;
 }
 
+/* Remove Button - Fixed Size */
+.cart-page .remove-btn {
+  width: 110px; /* fixed width */
+  height: 36px; /* fixed height */
+  background: #ffecec;
+  color: #e74c3c;
+  border: 1px solid #f5b5b5;
+  font-size: 13px;
+  border-radius: 8px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center; /* center text */
+  gap: 5px;
+
+  transition: all 0.25s ease;
+}
+
+/* Hover */
+.cart-page .remove-btn:hover {
+  background: #e74c3c;
+  color: #fff;
+  border-color: #e74c3c;
+  transform: translateY(-1px);
+}
+
+/* Click */
+.cart-page .remove-btn:active {
+  transform: scale(0.95);
+}
+
 /* Checkout button */
 .cart-page .checkout-btn {
   width: 100%;
@@ -128,17 +162,18 @@
 
 /* Totals */
 .cart-page .subtotal-row td,
-.tax-row td {
+.cart-page .tax-row td {
   font-size: 16px;
   font-weight: 500;
-  background: #fafafa;
+  background: transparent; /* FIX */
 }
 
 .cart-page .total-row.total-final td {
   font-size: 20px;
   font-weight: bold;
-  background: #f1f3f5;
-  color: #000;
+  background: transparent; /* FIX */
+  color: #28c966; /* matches theme better */
+  border-top: 2px solid #28c966; /* nice clean separator */
 }
 
 /* Inputs in checkout */
@@ -165,6 +200,7 @@
     height: 70px;
   }
 }
+
 .cart-page body {
   background: linear-gradient(135deg, #cdebd7, #f0e8e8);
 }
