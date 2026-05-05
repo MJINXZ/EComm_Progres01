@@ -1,43 +1,52 @@
-<section class="footer">
-  <div class="container py-3">
-    <!-- Footer Content -->
-    <div class="row footer-content-wrapper">
-      <div class="col-lg-4 footer-content">
-        <h3>Contact Us</h3>
-        <p>Email: EclairStop@gmail.com</p>
-        <p>Phone: +961 123 456 789</p>
-        <p>Address: 123 Main Street, Beirut, Lebanon</p>
+
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row">
+
+      <!-- About / Brand -->
+      <div class="col-md-4 mb-4">
+        <h5>Éclair Shop</h5>
+        <p>Bringing you the finest handcrafted éclairs, made fresh daily with love. Taste the sweetness in every bite.</p>
       </div>
-      <div class="col-lg-4 footer-content">
-        <h3>Information</h3>
-        <ul class="list">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">About</a></li>
-          <li><a href="#">Services</a></li>
-          <li><a href="#">Products</a></li>
-          <li><a href="#">Contact</a></li>
+
+      <!-- Quick Links -->
+      <div class="col-md-4 mb-4">
+        <h5>Quick Links</h5>
+        <ul class="footer-links">
+          <li><a href="/E-commerce/public/">Home</a></li>
+          <li><a href="/E-commerce/public/shop.php">Shop</a></li>
+          <li><a href="/E-commerce/public/about.php">About Us</a></li>
+          <li><a href="/E-commerce/public/contact.php">Contact</a></li>
         </ul>
       </div>
-      <div class="col-lg-4 footer-content">
-        <h3>Social Media</h3>
-        <ul class="list">
-          <li><a href="#">Instagram</a></li>
-          <li><a href="#">Facebook</a></li>
-          <li><a href="#">Twitter</a></li>
-          <li><a href="#">Youtube</a></li>
-          <li><a href="#">Tiktok</a></li>
-        </ul>
+
+      <!-- Contact / Social -->
+      <div class="col-md-4 mb-4">
+        <h5>Get In Touch</h5>
+        <p>hello@eclairshop.com</p>
+        <p>+63 912 345 6789</p>
+        <div class="footer-social d-flex mt-3">
+          <a href="#" aria-label="Facebook">FB</a>
+          <a href="#" aria-label="Instagram">IG</a>
+          <a href="#" aria-label="Twitter">X</a>
+        </div>
       </div>
+
+    </div>
+
+    <hr class="footer-divider">
+
+    <div class="footer-bottom d-flex flex-wrap justify-content-between align-items-center">
+      <p class="mb-0">&copy; <?php echo date('Y'); ?> Éclair Shop. All rights reserved.</p>
+      <p class="mb-0">Made with <span class="footer-heart">&hearts;</span> for éclair lovers</p>
     </div>
   </div>
-
-
-  <div class="bottom-bar text-center">
-    <p>&copy; 2024 Eclair Shop. All rights reserved</p>
-  </div>
-</section>
+</footer>
 
 </body>
+</html>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

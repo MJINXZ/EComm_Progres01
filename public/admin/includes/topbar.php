@@ -81,7 +81,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
           </a>
 
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="/E-commerce/public/users/profile_page.php">Profile</a></li>
+            <li><a class="dropdown-item" href="/E-commerce/public/users/profilePage.php">Profile</a></li>
             <li><hr class="dropdown-divider"></li>
             <li>
               <button type="submit" name="logout" class="dropdown-item">Sign out</button>
