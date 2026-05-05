@@ -3,53 +3,76 @@
   src: url("../fonts/CoffeeShopDemo-Regular.otf") format("opentype");
 }
 
+/* ========== BASE BACKGROUNDS ========== */
 .index-page,
 .order-page,
 .cart-page,
 .product-page {
-  background: linear-gradient(to right, #6a9c94, #fdf6e3);
+  background: linear-gradient(to right, #abf2be, #f6d89c);
 }
 
+/* ========== HERO / INTRO ========== */
 .index-page .intro {
   background: url("../img/eclair_coffee.jpg") no-repeat;
   background-size: cover;
   height: 90vh;
   background-position: 50%;
   width: 100%;
+  position: relative;
+}
+
+.index-page .intro::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+.index-page .intro .container {
+  position: relative;
+  z-index: 2;
 }
 
 .index-page .intro h1 {
   font-size: 4rem;
   font-weight: 700;
+  color: #ffffff;
+  text-shadow: 2px 2px 12px rgba(0, 0, 0, 0.5);
 }
 
+/* ========== BUTTONS ========== */
+.index-page .btn1,
+.index-page .btn2 {
+  height: 48px;
+  border: none;
+  outline: none;
+  background-color: #2d8a4e;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0 28px;
+}
+
+.index-page .btn1 { width: 35%; }
+.index-page .btn2 { width: 20%; min-width: 160px; }
+
+.index-page .btn1:hover,
+.index-page .btn2:hover {
+  background-color: #236b3d;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(45, 138, 78, 0.35);
+}
+
+/* ========== CAROUSEL ========== */
 .index-page .new img {
   width: 100%;
   height: 120px;
-  object-fit: contain; /* keeps proportions */
-}
-
-/* redundant part(might delete later) */
-.index-page .btn1 {
-  height: 45px;
-  width: 35%;
-  border: none;
-  outline: none;
-  background-color: rgb(9, 214, 88);
-  color: white;
-  font-weight: 700;
-  border-radius: 60px;
-}
-
-.index-page .btn2 {
-  height: 45px;
-  width: 20%;
-  border: none;
-  outline: none;
-  background-color: rgb(9, 214, 88);
-  color: white;
-  font-weight: 700;
-  border-radius: 60px;
+  object-fit: contain;
 }
 
 .carousel {
@@ -63,7 +86,6 @@
   animation: scroll 15s linear infinite;
 }
 
-/* prevent bootstrap wrapping */
 .row.flex-nowrap {
   display: flex;
   flex-wrap: nowrap;
@@ -71,162 +93,378 @@
 
 .col-lg-4 {
   min-width: 250px;
+  flex-shrink: 0;
 }
 
-/* animation */
 @keyframes scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-40%);
-  }
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
-.index-page .banner {
-  background-color: #f5e6d3;
-}
-
-.index-page .product-img {
-  width: 100%;
-  max-width: 800px;
-  height: auto;
-  object-fit: contain;
-  background: #f8f8f8;
-  margin-bottom: 20px;
-}
-
-.index-page .banner-title {
-  color: #121212;
-  font-family: coffee;
-  font-weight: bold;
-}
-
-.index-page .banner p {
-  color: #121212bf;
-  line-height: 1.6;
-  font-size: 20px;
-}
-
-.index-page .new {
-  font-family: "Rubik", sans-serif;
-}
-
-@media (max-width: 768px) {
-  .login form {
-    width: 90%;
-    padding: 20px;
-  }
-}
+/* ========== SECTION HEADINGS ========== */
 .index-page .our_products {
   font-family: "Lobster", cursive;
-  font-size: 40px;
-  color: #38b338;
+  font-size: 42px;
+  color: #2d8a4e;
   font-weight: bold;
   text-align: center;
   letter-spacing: 2px;
+  margin-bottom: 8px;
 }
+
+.section-subtitle {
+  font-family: "Rubik", sans-serif;
+  font-size: 1rem;
+  color: #c0553a;
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: 0.4px;
+}
+
+.index-page .new h6,
 .index-page .vary_custom_sell {
   font-family: "Rubik", sans-serif;
   font-size: 15px;
-  color: #572e2e;
-  font-weight: bold;
+  color: #4a3b3b;
+  font-weight: 600;
   text-align: center;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
 }
 
-.index-page .product-card {
-  height: 100%;
+/* Override any inline red styles */
+.index-page h6[style*="color: red"],
+.index-page h6[style*="color:red"] {
+  color: #c0553a !important;
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: 0.4px;
 }
 
-.index-page .card {
+/* ========== SWEET TOOTHS CARDS ========== */
+.card-img-wrapper {
+  width: 100%;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
+  background: #fafaf7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-bottom: 1px solid #f0f0ec;
 }
 
 .index-page .product .card-img-top {
   width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-.btn1.hover {
-  background-color: #2ecc71;
-  transition: 0.5s;
-}
-/* CARD EFFECTS SA 4TH SECTION(Best Sellers) */
-.product-card {
-  transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
-  cursor: pointer;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.06));
 }
 
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.product-img-container {
+/* Image wrapper keeps consistent aspect ratio */
+.card-img-wrapper {
   width: 100%;
-  height: 220px;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #f9fdf7;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  border-radius: 12px;
-  background: #f8f9fa;
+  padding: 12px;
 }
 
-.product-img {
-  max-width: 100%;
-  max-height: 100%;
+.index-page .product .card-img-top {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.product-card:hover .product-img {
-  transform: scale(1.05);
+.index-page .product .card:hover .card-img-top {
+  transform: scale(1.08);
 }
 
-.product-title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  margin-top: 12px;
-  margin-bottom: 5px;
-  color: #333;
+.index-page .product .card-body {
+  padding: 16px 14px 20px;
 }
 
-.product-price {
-  color: #dc3545;
-  font-weight: bold;
+.index-page .product .card-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #1e2f1e;
+  margin-bottom: 6px;
+}
+
+.index-page .product .card-text {
+  font-size: 0.9rem;
+  color: #5a6b5a;
+  line-height: 1.4;
+}
+
+.card-price {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #c0392b;
+  margin-top: 4px;
+}
+
+/* ========== COMMUNITY SECTION CARDS ========== */
+.community-card {
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.3s ease;
+  background: #ffffff;
+}
+
+.community-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+}
+
+.community-img-wrapper {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.community-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.community-card:hover .community-img {
+  transform: scale(1.06);
+}
+
+.index-page .new-section .card-body {
+  padding: 20px 16px;
+}
+
+.index-page .new-section .card-title {
+  font-weight: 700;
   font-size: 1.1rem;
+  color: #1e2f1e;
 }
 
+.index-page .new-section .card-text {
+  color: #5a6b5a;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* ========== BEST SELLERS CARDS ========== */
+.best-card {
+  background: #ffffff;
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              box-shadow 0.3s ease;
+}
+
+.best-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+}
+
+.best-img-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #fafaf7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-bottom: 1px solid #f0f0ec;
+}
+
+.best-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.06));
+}
+
+.best-card:hover .best-img {
+  transform: scale(1.08);
+}
+
+.best-title {
+  font-size: 0.93rem;
+  font-weight: 600;
+  color: #1e2f1e;
+  margin: 14px 0 4px 0;
+}
+
+.best-price {
+  color: #c0392b;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+/* ========== ECLAIR / CTA SECTION ========== */
+.e_clair {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+    url("../img/friends.jpg") no-repeat;
+  background-size: cover;
+  background-position: 50%;
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+}
+
+.e_clair h1 {
+  font-family: "Lobster", cursive;
+  font-size: 5rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.cta-subtitle {
+  font-weight: 400;
+  font-size: 1.05rem;
+  opacity: 0.9;
+  color: #ffffff;
+}
+/* ========== FOOTER ========== */
+.site-footer {
+  background: #1a2e1a;
+  color: #d4e6d4;
+  padding: 50px 0 20px;
+  font-family: "Rubik", sans-serif;
+}
+
+.site-footer h5 {
+  font-family: "Lobster", cursive;
+  font-size: 1.3rem;
+  color: #abf2be;
+  margin-bottom: 18px;
+  letter-spacing: 1px;
+}
+
+.site-footer p,
+.site-footer li {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #c2d9c2;
+}
+
+.site-footer a {
+  color: #c2d9c2;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.site-footer a:hover {
+  color: #f6d89c;
+  text-decoration: none;
+}
+
+.site-footer .footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.site-footer .footer-links li {
+  margin-bottom: 8px;
+}
+
+/* Divider */
+.footer-divider {
+  border-color: rgba(255, 255, 255, 0.1);
+  margin: 30px 0 18px;
+}
+
+/* Bottom bar */
+.footer-bottom {
+  font-size: 0.82rem;
+  color: #acccac;
+}
+
+.footer-heart {
+  color: #c0553a;
+}
+
+/* Social icons */
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  margin-right: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #c2d9c2;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.footer-social a:hover {
+  background: #2d8a4e;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+
+
+
+/* Responsive footer */
 @media (max-width: 768px) {
-  .product-img-container {
-    height: 200px;
+  .site-footer {
+    padding: 35px 0 15px;
+    text-align: center;
+  }
+  .site-footer .col-md-4 {
+    margin-bottom: 25px;
+  }
+  .footer-social {
+    justify-content: center;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
   }
 }
 
-/* SHADOW EFFECT (Di mo gana Idk Why) */
-
-.index-page .card:hover {
-  box-shadow: -1px -1px 40px -4px rgba(0, 0, 0, 0.75);
-  -webkit-box-shadow: -1px -1px 40px -4px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: -1px -1px 40px -4px rgba(0, 0, 0, 0.75);
-  transition: 0.5s;
+/* ========== RESPONSIVE ========== */
+@media (max-width: 992px) {
+  .index-page .intro h1 { font-size: 3rem; }
+  .e_clair h1 { font-size: 3.8rem; }
+  .index-page .our_products { font-size: 36px; }
 }
 
-.e_clair {
-  background:
-    linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("../img/friends.jpg") no-repeat;
-  background-size: cover;
-  height: 80vh;
-  background-position: 50%;
-  width: 100%;
-  min-height: 100vh;
+@media (max-width: 768px) {
+  .index-page .intro h1 { font-size: 2.5rem; }
+  .index-page .btn1 { width: 60%; }
+  .index-page .btn2 { width: 50%; min-width: auto; }
+  .e_clair h1 { font-size: 3rem; }
+  .index-page .our_products { font-size: 32px; }
+  .section-subtitle { font-size: 0.9rem; }
+
+  .card-img-wrapper { aspect-ratio: 1 / 1; }
+  .best-img-wrapper { aspect-ratio: 1 / 1; padding: 12px; }
 }
-.e_clair h1 {
-  font-family: "Lobster", cursive;
-  font-size: 7rem;
-  font-weight: 700;
+
+@media (max-width: 576px) {
+  .index-page .intro h1 { font-size: 2rem; }
+  .index-page .our_products { font-size: 28px; }
+  .e_clair h1 { font-size: 2.2rem; }
+  .index-page .btn1 { width: 80%; }
+  .index-page .btn2 { width: 70%; min-width: auto; }
+
+  .card-img-wrapper { aspect-ratio: 4 / 3; padding: 10px; }
+  .best-img-wrapper { aspect-ratio: 4 / 3; padding: 10px; }
+  .community-img-wrapper { aspect-ratio: 3 / 2; }
+
+  .index-page .product .card-body { padding: 12px 10px 16px; }
+  .index-page .product .card-title { font-size: 0.95rem; }
+  .card-price { font-size: 1rem; }
 }

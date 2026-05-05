@@ -1,0 +1,37 @@
+.sidebar-page {
+  display: flex;
+}
+
+.sidebar-page .admin-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background-color: #212529;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.sidebar-page .main-content {
+  margin-left: 260px;
+  padding: 30px;
+  width: calc(100% - 260px); /* ✅ ADD THIS */
+}
+
+.sidebar-page .admin-sidebar .nav-link {
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 5px;
+  transition: 0.2s;
+}
+
+.sidebar-page .admin-sidebar .nav-link:hover {
+  background-color: #343a40;
+}
+
+.sidebar-page .admin-sidebar .mt-auto {
+  margin-top: auto;
+}

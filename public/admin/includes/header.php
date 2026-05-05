@@ -22,6 +22,8 @@
 <link rel="stylesheet" href="/E-commerce/public/assets/css/footer.css">
 <link rel="stylesheet" href="/E-commerce/public/assets/css/profile_page.css">
 <link rel="stylesheet" href="/E-commerce/public/assets/css/receipt.css">
+<link rel="stylesheet" href="/E-commerce/public/assets/css/aboutUs.css">
+<link rel="stylesheet" href="/E-commerce/public/assets/css/contactUs.css">
 
 
 

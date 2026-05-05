@@ -1,0 +1,39 @@
+.dashboard-page .dashboard-container {
+  padding: 25px;
+}
+
+.dashboard-page .dashboard-card {
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: 0.2s ease;
+  background: #fff;
+}
+
+.dashboard-page .dashboard-card:hover {
+  transform: translateY(-5px);
+}
+
+.dashboard-page .dashboard-card h5 {
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.dashboard-page canvas {
+  max-height: 300px;
+}
+
+.dashboard-page .stat-card {
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-page .stat-sales {
+  background: linear-gradient(45deg, #28a745, #218838);
+}
+
+.dashboard-page .stat-orders {
+  background: linear-gradient(45deg, #007bff, #0056b3);
+}

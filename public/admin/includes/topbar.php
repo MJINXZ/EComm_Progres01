@@ -32,7 +32,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </li>
 
         <li class="nav-item">
-          <a class="nav-link" href="#">Contact Us</a>
+          <a class="nav-link" href="/E-commerce/public/contactUs">Contact Us</a>
         </li>
 
         <li class="nav-item">
