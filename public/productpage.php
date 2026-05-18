@@ -1,33 +1,92 @@
 <?php 
 session_start();
+
 $pageClass = "product-page";
+
 include('./admin/includes/header.php');
 include('./admin/includes/topbar.php');
 include_once("../app/config/config.php");
 
-if(isset($_GET['id'])) {
 
-    $id = mysqli_real_escape_string($conn, $_GET['id']);
+// =========================
+// CHECK PRODUCT UUID
+// =========================
+if(isset($_GET['uuid'])) {
 
-    $query = "SELECT id, productName, productDescription, price, img 
+    $uuid = mysqli_real_escape_string($conn, $_GET['uuid']);
+
+    // =========================
+    // GET PRODUCT USING UUID
+    // =========================
+    $query = "SELECT 
+                    id,
+                    uuid,
+                    productName,
+                    productDescription,
+                    price,
+                    img
               FROM product_item 
-              WHERE id = '$id'";
+              WHERE uuid = '$uuid'
+              LIMIT 1";
 
     $result = mysqli_query($conn, $query);
-    
+
     if(!$result) {
+
         echo "Database error: " . mysqli_error($conn);
         exit();
     }
-    
+
     $product = mysqli_fetch_assoc($result);
 
+    // PRODUCT NOT FOUND
     if(!$product){
+
         echo "Product not found";
         exit();
     }
 
-} else {
+} 
+
+// =========================
+// OPTIONAL BACKWARD SUPPORT
+// OLD id= LINKS STILL WORK
+// =========================
+elseif(isset($_GET['id'])) {
+
+    $id = mysqli_real_escape_string($conn, $_GET['id']);
+
+    $query = "SELECT 
+                    id,
+                    uuid,
+                    productName,
+                    productDescription,
+                    price,
+                    img
+              FROM product_item 
+              WHERE id = '$id'
+              LIMIT 1";
+
+    $result = mysqli_query($conn, $query);
+
+    if(!$result) {
+
+        echo "Database error: " . mysqli_error($conn);
+        exit();
+    }
+
+    $product = mysqli_fetch_assoc($result);
+
+    if(!$product){
+
+        echo "Product not found";
+        exit();
+    }
+
+} 
+
+else {
+
     echo "No Product Selected";
     exit();
 }
@@ -35,78 +94,246 @@ if(isset($_GET['id'])) {
 
 <div class="product-container">
 
+    <!-- LEFT -->
     <div class="left">
-        <!-- Discount badge removed -->
+
         <div class="image-wrapper">
-            <img src="assets/product_img/<?php echo htmlspecialchars($product['img']); ?>" alt="<?php echo htmlspecialchars($product['productName']); ?>">
+
+            <img src="assets/product_img/<?php echo htmlspecialchars($product['img']); ?>"
+                 alt="<?php echo htmlspecialchars($product['productName']); ?>">
+
         </div>
+
     </div>
 
+
+
+
+
+    <!-- RIGHT -->
     <div class="right">
 
-        <div class="brand">Premium Collection</div>
-        
+        <div class="brand">
+
+            Premium Collection
+
+        </div>
+
+
+
+
+
+        <!-- PRODUCT TITLE -->
         <div class="title">
+
             <?php echo htmlspecialchars($product['productName']); ?>
+
         </div>
 
-        <!-- Clean price (no discount) -->
+
+
+
+
+        <!-- PRICE -->
         <div class="price-section">
-            <span class="price">₱<?php echo number_format($product['price'], 2); ?></span>
+
+            <span class="price">
+
+                ₱<?php echo number_format($product['price'], 2); ?>
+
+            </span>
+
         </div>
 
+
+
+
+
+        <!-- DESCRIPTION -->
         <div class="desc">
+
             <?php echo nl2br(htmlspecialchars($product['productDescription'])); ?>
+
         </div>
 
+
+
+
+
+        <!-- SIZE -->
         <div class="size-section">
+
             <div class="label">Size:</div>
+
             <div class="size-options" id="sizeOptions">
-                <button type="button" class="size-btn" data-size="S">S</button>
-                <button type="button" class="size-btn" data-size="M">M</button>
-                <button type="button" class="size-btn active" data-size="L">L</button>
-                <button type="button" class="size-btn" data-size="XL">XL</button>
-                <button type="button" class="size-btn" data-size="XXL">XXL</button>
+
+                <button type="button"
+                        class="size-btn"
+                        data-size="S">
+
+                    S
+
+                </button>
+
+                <button type="button"
+                        class="size-btn"
+                        data-size="M">
+
+                    M
+
+                </button>
+
+                <button type="button"
+                        class="size-btn active"
+                        data-size="L">
+
+                    L
+
+                </button>
+
+                <button type="button"
+                        class="size-btn"
+                        data-size="XL">
+
+                    XL
+
+                </button>
+
+                <button type="button"
+                        class="size-btn"
+                        data-size="XXL">
+
+                    XXL
+
+                </button>
+
             </div>
+
         </div>
 
+
+
+
+
+        <!-- COLOR -->
         <div class="color-section">
+
             <div class="label">Color:</div>
+
             <div class="color-options" id="colorOptions">
-                <div class="color-circle" style="background-color: #2c3e50;" data-color="Black"></div>
-                <div class="color-circle" style="background-color: #d4af37;" data-color="Gold"></div>
-                <div class="color-circle" style="background-color: #a55d35;" data-color="Brown"></div>
-                <div class="color-circle selected" style="background-color: #e67e22;" data-color="Orange"></div>
+
+                <div class="color-circle"
+                     style="background-color: #2c3e50;"
+                     data-color="Black">
+
+                </div>
+
+                <div class="color-circle"
+                     style="background-color: #d4af37;"
+                     data-color="Gold">
+
+                </div>
+
+                <div class="color-circle"
+                     style="background-color: #a55d35;"
+                     data-color="Brown">
+
+                </div>
+
+                <div class="color-circle selected"
+                     style="background-color: #e67e22;"
+                     data-color="Orange">
+
+                </div>
+
             </div>
+
         </div>
 
-        <div class="label">Quantity:</div>
 
-        <form method="POST" action="/E-commerce/app/controllers/cartController.php" id="cartForm">
 
-            <input type="hidden" name="product_id" value="<?php echo htmlspecialchars($product['id']); ?>">
-            <input type="hidden" name="selected_size" id="selected_size" value="L">
-            <input type="hidden" name="selected_color" id="selected_color" value="Orange">
 
+
+        <!-- QUANTITY -->
+        <div class="label">
+
+            Quantity:
+
+        </div>
+
+
+
+
+
+        <!-- CART FORM -->
+        <form method="POST"
+              action="/E-commerce/app/controllers/cartController.php"
+              id="cartForm">
+
+            <!-- PRODUCT UUID -->
+            <input type="hidden"
+                   name="product_uuid"
+                   value="<?php echo htmlspecialchars($product['uuid']); ?>">
+
+            <!-- SIZE -->
+            <input type="hidden"
+                   name="selected_size"
+                   id="selected_size"
+                   value="L">
+
+            <!-- COLOR -->
+            <input type="hidden"
+                   name="selected_color"
+                   id="selected_color"
+                   value="Orange">
+
+
+
+
+            <!-- QUANTITY -->
             <div class="quantity-box">
-                <button type="button" onclick="decrementQuantity()">-</button>
+
+                <button type="button"
+                        onclick="decrementQuantity()">
+
+                    -
+
+                </button>
+
                 <input type="number"
                        name="quantity"
                        id="quantity_input"
                        value="1"
                        min="1">
-                <button type="button" onclick="incrementQuantity()">+</button>
+
+                <button type="button"
+                        onclick="incrementQuantity()">
+
+                    +
+
+                </button>
+
             </div>
 
+
+
+
+
+            <!-- ADD TO CART -->
             <button type="submit"
                     name="add_to_cart"
                     class="buy-btn">
-                <i class="fas fa-shopping-cart"></i> Add to Cart
+
+                <i class="fas fa-shopping-cart"></i>
+
+                Add to Cart
+
             </button>
 
         </form>
 
     </div>
+
 </div>
 
 <?php
@@ -115,39 +342,83 @@ include('./admin/includes/footer.php');
 
 <script>
 
+// =========================
+// INCREMENT QUANTITY
+// =========================
 function incrementQuantity() {
+
     let input = document.getElementById("quantity_input");
+
     let newVal = parseInt(input.value) + 1;
+
     input.value = newVal;
 }
 
+
+
+
+
+// =========================
+// DECREMENT QUANTITY
+// =========================
 function decrementQuantity() {
+
     let input = document.getElementById("quantity_input");
+
     if(parseInt(input.value) > 1){
+
         input.value = parseInt(input.value) - 1;
     }
 }
 
+
+
+
+
+// =========================
+// SIZE SELECTOR
+// =========================
 const sizeBtns = document.querySelectorAll('.size-btn');
+
 const selectedSizeInput = document.getElementById('selected_size');
 
 sizeBtns.forEach(btn => {
+
     btn.addEventListener('click', function() {
+
         sizeBtns.forEach(b => b.classList.remove('active'));
+
         this.classList.add('active');
+
         selectedSizeInput.value = this.getAttribute('data-size');
+
     });
+
 });
 
+
+
+
+
+// =========================
+// COLOR SELECTOR
+// =========================
 const colorCircles = document.querySelectorAll('.color-circle');
+
 const selectedColorInput = document.getElementById('selected_color');
 
 colorCircles.forEach(circle => {
+
     circle.addEventListener('click', function() {
+
         colorCircles.forEach(c => c.classList.remove('selected'));
+
         this.classList.add('selected');
+
         selectedColorInput.value = this.getAttribute('data-color');
+
     });
+
 });
 
 </script>

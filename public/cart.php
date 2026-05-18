@@ -51,6 +51,7 @@ if (isset($_SESSION['user_id'])) {
 
 <?php
 $totalPrice = 0;
+$cartHasItems = false;
 
 if (isset($_SESSION['user_id'])) {
 
@@ -64,6 +65,8 @@ if (isset($_SESSION['user_id'])) {
     $result = mysqli_query($conn, $query);
 
     if ($result && mysqli_num_rows($result) > 0) {
+
+        $cartHasItems = true;
 
         while ($row = mysqli_fetch_assoc($result)) {
 
@@ -90,7 +93,7 @@ if (isset($_SESSION['user_id'])) {
 </td>
 
 <td>
-    <input type="number" value="<?php echo $row["quantity"]; ?>">
+    <input type="number" value="<?php echo $row["quantity"]; ?>" readonly>
 </td>
 
 <td>₱<?php echo number_format($subtotal, 2); ?></td>
@@ -106,6 +109,8 @@ if (isset($_SESSION['user_id'])) {
 } else {
 
     if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
+
+        $cartHasItems = true;
 
         foreach ($_SESSION['cart'] as $productid => $quantity) {
 
@@ -139,7 +144,7 @@ if (isset($_SESSION['user_id'])) {
 </td>
 
 <td>
-    <input type="number" value="<?php echo $quantity; ?>">
+    <input type="number" value="<?php echo $quantity; ?>" readonly>
 </td>
 
 <td>₱<?php echo number_format($subtotal, 2); ?></td>
@@ -179,28 +184,73 @@ $grandTotal = $totalPrice + $tax;
 </div>
 </div>
 
-<!-- ================= RIGHT SIDE ================= -->
 <div class="cart-right">
 <div class="checkout-box">
 
 <form method="POST" action="/E-commerce/app/controllers/checkoutController.php">
 
 <h4>Address:</h4>
-<input type="text" name="address" class="form-control mb-3"
-       value="<?php echo $address; ?>">
+<input type="text" 
+       name="address" 
+       class="form-control mb-3"
+       value="<?php echo $address; ?>"
+       <?php echo !$cartHasItems ? 'disabled' : ''; ?>>
 
 <h4>Phone Number:</h4>
-<input type="text" name="phone" class="form-control mb-3"
-       value="<?php echo $phone; ?>">
+<input type="text" 
+       name="phone" 
+       class="form-control mb-3"
+       value="<?php echo $phone; ?>"
+       <?php echo !$cartHasItems ? 'disabled' : ''; ?>>
 
 <h4>Form of Payment:</h4>
-<input type="text" name="payment_method" class="form-control mb-4">
+
+<div class="form-check mb-2">
+    <input class="form-check-input"
+           type="radio"
+           name="payment_method"
+           id="cash"
+           value="Cash"
+           required
+           <?php echo !$cartHasItems ? 'disabled' : ''; ?>>
+
+    <label class="form-check-label" for="cash">
+        Cash
+    </label>
+</div>
+
+<div class="form-check mb-4">
+    <input class="form-check-input"
+           type="radio"
+           name="payment_method"
+           id="gcash"
+           value="GCash"
+           <?php echo !$cartHasItems ? 'disabled' : ''; ?>>
+
+    <label class="form-check-label" for="gcash">
+        GCash
+    </label>
+</div>
 
 <h4>Total Price:</h4>
-<input name="total" type="text" class="form-control mb-4"
-       value="₱<?php echo number_format($grandTotal, 2); ?>" readonly>
+<input name="total" 
+       type="text" 
+       class="form-control mb-4"
+       value="₱<?php echo number_format($grandTotal, 2); ?>" 
+       readonly>
 
-<button type="submit" name="checkout" class="checkout-btn">CHECK OUT</button>
+<button type="submit" 
+        name="checkout" 
+        class="checkout-btn"
+        <?php echo !$cartHasItems ? 'disabled' : ''; ?>>
+    CHECK OUT
+</button>
+
+<?php if (!$cartHasItems): ?>
+    <p class="text-danger mt-3">
+        Cannot checkout because your cart is empty.
+    </p>
+<?php endif; ?>
 
 </form>
 
@@ -208,6 +258,10 @@ $grandTotal = $totalPrice + $tax;
 </div>
 
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
 <script>
 document.addEventListener('click', function(e) {

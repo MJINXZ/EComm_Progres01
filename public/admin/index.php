@@ -1,22 +1,60 @@
 <?php 
 session_start();
+
 $pageClass = "dashboard-page";
 
-include_once("../../app/config/config.php");
 include('../admin/includes/header.php');
-include('../admin/includes/topbar.php');
-
+include_once("../../app/config/config.php");
 
 
 // =====================
-// WEEKLY SALES (7 DAYS)
+// DAILY SALES
+// =====================
+$daily_query = "
+SELECT 
+    DATE_FORMAT(DateCreated, '%b %d %h:%i %p') as time_label,
+    SUM(totalPrice) as total
+
+FROM orders
+
+WHERE DateCreated >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+AND status IN ('pending', 'completed')
+
+GROUP BY HOUR(DateCreated), DATE(DateCreated)
+
+ORDER BY DateCreated ASC
+";
+
+$daily_result = mysqli_query($conn, $daily_query);
+
+$daily_labels = [];
+$daily_data = [];
+
+while($row = mysqli_fetch_assoc($daily_result)){
+
+    $daily_labels[] = $row['time_label'];
+
+    $daily_data[] = (float)$row['total'];
+
+}
+
+
+// =====================
+// WEEKLY SALES
 // =====================
 $weekly_query = "
-SELECT DATE(DateCreated) as date, SUM(totalPrice) as total
+SELECT 
+    DATE_FORMAT(DateCreated, '%W (%b %d)') as date_label,
+    SUM(totalPrice) as total
+
 FROM orders
+
 WHERE DateCreated >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+AND status IN ('pending', 'completed')
+
 GROUP BY DATE(DateCreated)
-ORDER BY date ASC
+
+ORDER BY DATE(DateCreated) ASC
 ";
 
 $weekly_result = mysqli_query($conn, $weekly_query);
@@ -25,20 +63,30 @@ $week_labels = [];
 $week_data = [];
 
 while($row = mysqli_fetch_assoc($weekly_result)){
-    $week_labels[] = $row['date'];
-    $week_data[] = $row['total'];
+
+    $week_labels[] = $row['date_label'];
+
+    $week_data[] = (float)$row['total'];
+
 }
 
 
 // =====================
-// MONTHLY SALES (6 MONTHS)
+// MONTHLY SALES
 // =====================
 $monthly_query = "
-SELECT DATE_FORMAT(DateCreated, '%Y-%m') as month, SUM(totalPrice) as total
+SELECT 
+    DATE_FORMAT(DateCreated, '%M %Y') as month,
+    SUM(totalPrice) as total
+
 FROM orders
-WHERE DateCreated >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+
+WHERE DateCreated >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+AND status IN ('pending', 'completed')
+
 GROUP BY month
-ORDER BY month ASC
+
+ORDER BY MIN(DateCreated) ASC
 ";
 
 $monthly_result = mysqli_query($conn, $monthly_query);
@@ -47,86 +95,38 @@ $month_labels = [];
 $month_data = [];
 
 while($row = mysqli_fetch_assoc($monthly_result)){
+
     $month_labels[] = $row['month'];
-    $month_data[] = $row['total'];
+
+    $month_data[] = (float)$row['total'];
+
 }
 
 
 // =====================
-// TOTAL STATS (OPTIONAL)
+// RECENT COMPLETED ORDERS
 // =====================
-$total_sales_query = "SELECT SUM(totalPrice) as total FROM orders";
-$total_orders_query = "SELECT COUNT(*) as count FROM orders";
-
-$total_sales = mysqli_fetch_assoc(mysqli_query($conn, $total_sales_query))['total'] ?? 0;
-$total_orders = mysqli_fetch_assoc(mysqli_query($conn, $total_orders_query))['count'] ?? 0;
-?>
-
-
-
-<!-- DASHBOARD CONTENT -->
-<div class="dashboard-container">
-
-    <h2 class="mb-4">Sales Dashboard</h2>
-
-    <!-- STATS CARDS -->
-    <div class="row mb-4">
-
-        <div class="col-md-6">
-            <div class="stat-card stat-sales">
-                <h5>Total Sales</h5>
-                <h3>₱<?php echo number_format($total_sales, 2); ?></h3>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="stat-card stat-orders">
-                <h5>Total Orders</h5>
-                <h3><?php echo $total_orders; ?></h3>
-            </div>
-        </div>
-
-    </div>
-
-
-    <!-- CHARTS -->
-    <div class="row">
-
-        <!-- WEEKLY -->
-        <div class="col-md-6">
-            <div class="card dashboard-card p-3">
-                <h5>Weekly Sales</h5>
-                <canvas id="weeklyChart"></canvas>
-            </div>
-        </div>
-
-        <!-- MONTHLY -->
-        <div class="col-md-6">
-            <div class="card dashboard-card p-3">
-                <h5>Monthly Sales</h5>
-                <canvas id="monthlyChart"></canvas>
-            </div>
-        </div>
-
-    </div>
-
-</div>
-
-<?php 
 $recent_query = "
 SELECT 
     orders.id,
     orders.totalPrice,
-    orders.address,
     orders.DateCreated,
+
     users.firstName,
     users.lastName,
     users.street,
     users.barangay,
     users.city
+
 FROM orders
-JOIN users ON users.id = orders.user_id
+
+JOIN users 
+ON users.id = orders.user_id
+
+WHERE orders.status = 'completed'
+
 ORDER BY orders.DateCreated DESC
+
 LIMIT 5
 ";
 
@@ -134,66 +134,166 @@ $recent_result = mysqli_query($conn, $recent_query);
 
 ?>
 
-<!-- RECENT ORDERS -->
-<div class="row mt-4">
-    <div class="col-12">
-        <div class="card dashboard-card p-3">
-            
-            <h5>Recent Orders</h5>
+<body class="dashboard-page">
 
-            <table class="table table-bordered table-hover mt-3">
-                <thead class="table-dark">
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <?php include('../admin/includes/sidebar.php'); ?>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+
+        <!-- CHARTS -->
+        <div class="charts-grid">
+
+            <!-- DAILY -->
+            <div class="chart-col">
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+                        📅 Daily Sales
+                    </div>
+
+                    <canvas id="dailyChart"></canvas>
+
+                </div>
+
+            </div>
+
+            <!-- WEEKLY -->
+            <div class="chart-col">
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+                        📈 Weekly Sales
+                    </div>
+
+                    <canvas id="weeklyChart"></canvas>
+
+                </div>
+
+            </div>
+
+            <!-- MONTHLY -->
+            <div class="chart-col">
+
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+                        📊 Monthly Sales
+                    </div>
+
+                    <canvas id="monthlyChart"></canvas>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- RECENT COMPLETED ORDERS -->
+        <div class="dashboard-card">
+
+            <div class="card-header">
+                ✅ Recent Completed Orders
+            </div>
+
+            <table class="recent-orders-table">
+
+                <thead>
+
                     <tr>
-                        <th>Customer Name</th>
+                        <th>Customer</th>
                         <th>Address</th>
                         <th>Location</th>
-                        <th>Total Price</th>
-                        <th>Date</th>
+                        <th>Total</th>
+                        <th>Date & Time</th>
                     </tr>
+
                 </thead>
 
                 <tbody>
 
                 <?php if(mysqli_num_rows($recent_result) > 0): ?>
+
                     <?php while($row = mysqli_fetch_assoc($recent_result)): ?>
+
                         <tr>
-                            <!-- CUSTOMER NAME -->
+
+                            <!-- CUSTOMER -->
                             <td>
-                                <?php echo $row['firstName'] . ' ' . $row['lastName']; ?>
+                                <?php
+                                echo htmlspecialchars(
+                                    $row['firstName'].' '.$row['lastName']
+                                );
+                                ?>
                             </td>
 
                             <!-- ADDRESS -->
                             <td>
-                                <?php echo $row['street']; ?>
+                                <?php
+                                echo htmlspecialchars($row['street']);
+                                ?>
                             </td>
 
                             <!-- LOCATION -->
                             <td>
-                                <?php echo $row['barangay'] . ', ' . $row['city']; ?>
+                                <?php
+                                echo htmlspecialchars(
+                                    $row['barangay'].', '.$row['city']
+                                );
+                                ?>
                             </td>
 
                             <!-- TOTAL -->
                             <td>
-                                ₱<?php echo number_format($row['totalPrice'], 2); ?>
+
+                                ₱<?php
+                                echo number_format($row['totalPrice'], 2);
+                                ?>
+
                             </td>
 
                             <!-- DATE -->
                             <td>
-                                <?php echo date("M d, Y - h:i A", strtotime($row['DateCreated'])); ?>
+
+                                <?php
+                                echo date(
+                                    "F d, Y - h:i A",
+                                    strtotime($row['DateCreated'])
+                                );
+                                ?>
+
                             </td>
+
                         </tr>
+
                     <?php endwhile; ?>
+
                 <?php else: ?>
+
                     <tr>
-                        <td colspan="5" class="text-center">No recent orders found</td>
+
+                        <td colspan="5" style="text-align:center;">
+                            No completed orders found
+                        </td>
+
                     </tr>
+
                 <?php endif; ?>
 
                 </tbody>
+
             </table>
 
         </div>
+
     </div>
+
 </div>
 
 
@@ -201,41 +301,96 @@ $recent_result = mysqli_query($conn, $recent_query);
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-// DATA FROM PHP
-const weekLabels = <?php echo json_encode($week_labels); ?>;
-const weekData = <?php echo json_encode($week_data); ?>;
 
-const monthLabels = <?php echo json_encode($month_labels); ?>;
-const monthData = <?php echo json_encode($month_data); ?>;
+// =====================
+// DAILY CHART
+// =====================
+new Chart(document.getElementById('dailyChart'), {
 
-
-// WEEKLY CHART
-new Chart(document.getElementById('weeklyChart'), {
     type: 'line',
+
     data: {
-        labels: weekLabels,
+
+        labels: <?php echo json_encode($daily_labels); ?>,
+
         datasets: [{
+
+            label: 'Daily Sales',
+
+            data: <?php echo json_encode($daily_data); ?>,
+
+            borderColor: '#f59e0b',
+
+            backgroundColor: 'rgba(245,158,11,0.2)',
+
+            fill: true,
+
+            tension: 0.4
+
+        }]
+
+    }
+
+});
+
+
+// =====================
+// WEEKLY CHART
+// =====================
+new Chart(document.getElementById('weeklyChart'), {
+
+    type: 'line',
+
+    data: {
+
+        labels: <?php echo json_encode($week_labels); ?>,
+
+        datasets: [{
+
             label: 'Weekly Sales',
-            data: weekData,
-            borderWidth: 2,
-            tension: 0.3
+
+            data: <?php echo json_encode($week_data); ?>,
+
+            borderColor: '#3b82f6',
+
+            backgroundColor: 'rgba(59,130,246,0.2)',
+
+            fill: true,
+
+            tension: 0.4
+
         }]
+
     }
+
 });
 
 
+// =====================
 // MONTHLY CHART
+// =====================
 new Chart(document.getElementById('monthlyChart'), {
+
     type: 'bar',
+
     data: {
-        labels: monthLabels,
+
+        labels: <?php echo json_encode($month_labels); ?>,
+
         datasets: [{
+
             label: 'Monthly Sales',
-            data: monthData,
-            borderWidth: 1
+
+            data: <?php echo json_encode($month_data); ?>,
+
+            backgroundColor: '#10b981'
+
         }]
+
     }
+
 });
+
 </script>
 
 </body>

@@ -1,0 +1,44 @@
+.changelog-page {
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+/* =========================
+CARDS
+========================= */
+.changelog-page .log-card {
+  transition: 0.3s ease;
+}
+
+.changelog-page .log-card:hover {
+  transform: translateY(-3px);
+}
+
+/* =========================
+TABLE
+========================= */
+.changelog-page .table tbody tr {
+  transition: 0.2s;
+}
+
+.changelog-page .table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+/* =========================
+BADGES
+========================= */
+.changelog-page .badge {
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  border-radius: 50px;
+}
+
+/* =========================
+RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+  .changelog-page h1 {
+    font-size: 26px;
+  }
+}

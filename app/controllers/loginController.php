@@ -2,9 +2,14 @@
 
 session_start();
 include_once("../config/config.php");
+include_once("changelogController.php");
 
+// ======================
+// GENERATE UUID
+// ======================
 function generate_uuid() {
-    return sprintf("%04x%04x-%04x-%04x-%04x-%04x%04x%04x",
+    return sprintf(
+        "%04x%04x-%04x-%04x-%04x-%04x%04x%04x",
         mt_rand(0, 0xffff), mt_rand(0, 0xffff),
         mt_rand(0, 0xffff),
         mt_rand(0, 0x4000) | 0x4000,
@@ -13,209 +18,227 @@ function generate_uuid() {
     );
 }
 
-
-
-
-
+/* ======================================================
+   LOGIN
+====================================================== */
 if(isset($_POST['login'])){
-$email = $_POST['email'];
-$password = $_POST['password'];
 
-$loginQuery = "SELECT id, firstName, lastName, username, emailAddress, role 
-               FROM users
-               WHERE emailAddress = ? AND password = ? LIMIT 1";
+    $email = $_POST['email'];
+    $password = $_POST['password'];
 
-        $stmt = $conn->prepare($loginQuery);
+    // only search by email
+    $loginQuery = "SELECT id, uuid, firstName, lastName, username, 
+                          emailAddress, password, role
+                   FROM users
+                   WHERE emailAddress = ?
+                   LIMIT 1";
 
-if ($stmt) {
-    mysqli_stmt_bind_param($stmt, "ss", $email, $password);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
+    $stmt = $conn->prepare($loginQuery);
 
-    if (mysqli_num_rows($result) > 0) {
-        $data = mysqli_fetch_assoc($result);
+    if($stmt){
 
-        $user_id = $data['id'];
-        $fullName = $data['firstName'] . " " . $data['lastName'];
-        $username = $data['username'];
-        $email = $data['email'];
-        $userRole = $data['role'];
+        mysqli_stmt_bind_param($stmt, "s", $email);
+        mysqli_stmt_execute($stmt);
 
-        $_SESSION['user_id'] = $user_id;
-        $_SESSION['userRole'] = $userRole;
-        $_SESSION['authUser'] = [
-            'user_id' => $user_id,
-            'fullName' => $fullName,
-            'username' => $username,
-            'email' => $email,
-        ];
+        $result = mysqli_stmt_get_result($stmt);
 
-        $_SESSION['message'] = "Welcome $fullName";
-        $_SESSION['code'] = "success";
+        if(mysqli_num_rows($result) > 0){
 
-        if ($userRole === 'admin') {
-            header("Location: /E-commerce/public/admin/index.php");
+            $data = mysqli_fetch_assoc($result);
+
+            // verify hashed password
+            if(password_verify($password, $data['password'])){
+
+                $user_id = $data['id'];
+                $uuid = $data['uuid'];
+                $fullName = $data['firstName'] . " " . $data['lastName'];
+                $username = $data['username'];
+                $emailAddress = $data['emailAddress'];
+                $userRole = $data['role'];
+
+                // SESSION
+                $_SESSION['user_id'] = $user_id;
+                $_SESSION['uuid'] = $uuid;
+                $_SESSION['userRole'] = $userRole;
+
+                $_SESSION['authUser'] = [
+                    'user_id' => $user_id,
+                    'uuid' => $uuid,
+                    'fullName' => $fullName,
+                    'username' => $username,
+                    'email' => $emailAddress
+                ];
+
+                $_SESSION['message'] = "Welcome $fullName";
+                $_SESSION['code'] = "success";
+
+                // ADMIN LOGIN
+                if($userRole === 'admin'){
+
+                    addAdminLog(
+                        $user_id,
+                        'LOGIN',
+                        'Admin logged into the system'
+                    );
+
+                    header("Location: /E-commerce/public/admin/index.php");
+                    exit();
+                }
+
+                // USER LOGIN
+                if($userRole === 'user'){
+                    header("Location: /E-commerce/public/index");
+                    exit();
+                }
+
+            } else {
+                $_SESSION['message'] = "Invalid username or password";
+                $_SESSION['code'] = "error";
+                header("Location: /E-commerce/public/login");
+                exit();
+            }
+
+        } else {
+            $_SESSION['message'] = "Invalid username or password";
+            $_SESSION['code'] = "error";
+            header("Location: /E-commerce/public/login");
             exit();
         }
-         if ($userRole === 'user') {
-            header("Location: /E-commerce/public/index");
-            exit();
-        }
+
     } else {
-        $_SESSION['message'] = "Invalid username or password";
+        $_SESSION['message'] = "Something went wrong";
         $_SESSION['code'] = "error";
         header("Location: /E-commerce/public/login");
-exit();
-    }
- }else {
-        $_SESSION['message'] = "something went wrong";
-        $_SESSION['code'] = "error";
-       header("Location: /E-commerce/public/login");
-exit();
+        exit();
     }
 }
 
 
+/* ======================================================
+   REGISTER
+====================================================== */
 if(isset($_POST['register'])){
-$firstName = $_POST['firstName'];
-$lastName = $_POST['lastName'];
-$middleName = $_POST['middleName'];
-$emailAddress = $_POST['email'];
-$contactNumber = $_POST['contact'];
-$username = $_POST['username'];
-$password = $_POST['password'];
-$confirmPassword = $_POST['confirmPassword'];
-$street = $_POST['street'];
-$barangay = $_POST['barangay'];
-$city = $_POST['city'];
-$role = "user";
-$uuid = generate_uuid();
 
+    $firstName = $_POST['firstName'];
+    $lastName = $_POST['lastName'];
+    $middleName = $_POST['middleName'];
+    $emailAddress = $_POST['email'];
+    $contactNumber = $_POST['contact'];
+    $username = $_POST['username'];
 
-// email validator //
-if(!filter_var($emailAddress, FILTER_VALIDATE_EMAIL)){
-    $_SESSION['old_firstName'] = $_POST['firstName'];
-    $_SESSION['old_lastName'] = $_POST['lastName'];
-    $_SESSION['old_middleName'] = $_POST['middleName'];
-    $_SESSION['old_email'] = $_POST['email'];
-    $_SESSION['old_contact'] = $_POST['contact'];
-    $_SESSION['old_username'] = $_POST['username'];
-    $_SESSION['old_street'] = $_POST['street'];
-    $_SESSION['old_barangay'] = $_POST['barangay'];
-    $_SESSION['old_city'] = $_POST['city'];
+    $password = $_POST['password'];
+    $confirmPassword = $_POST['confirmPassword'];
 
+    $street = $_POST['street'];
+    $barangay = $_POST['barangay'];
+    $city = $_POST['city'];
 
+    $role = "user";
 
-    $_SESSION['message'] = "Invalid email format";
-    $_SESSION['code'] = "error";
+    // generate UUID
+    $uuid = generate_uuid();
 
+    // hash password
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
+    // ======================
+    // EMAIL VALIDATOR
+    // ======================
+    if(!filter_var($emailAddress, FILTER_VALIDATE_EMAIL)){
+        $_SESSION['message'] = "Invalid email format";
+        $_SESSION['code'] = "error";
+        header("Location: /E-commerce/public/register");
+        exit();
+    }
 
+    // ======================
+    // EMAIL DUPLICATE CHECK
+    // ======================
+    $checkEmail = mysqli_query(
+        $conn,
+        "SELECT id FROM users 
+         WHERE emailAddress = '$emailAddress' 
+         LIMIT 1"
+    );
 
-    header("Location: /E-commerce/public/register");
-    exit();
+    if($checkEmail && mysqli_num_rows($checkEmail) > 0){
+        $_SESSION['message'] = "Email address already exists";
+        $_SESSION['code'] = "error";
+        header("Location: /E-commerce/public/register");
+        exit();
+    }
 
-}
+    // ======================
+    // USERNAME DUPLICATE CHECK
+    // ======================
+    $checkUsername = mysqli_query(
+        $conn,
+        "SELECT id FROM users 
+         WHERE username = '$username' 
+         LIMIT 1"
+    );
 
-// email dup checker //
-$checkEmail = mysqli_query($conn, "SELECT id FROM users WHERE emailAddress 
-                            = '$emailAddress' LIMIT 1");
+    if($checkUsername && mysqli_num_rows($checkUsername) > 0){
+        $_SESSION['message'] = "Username already exists";
+        $_SESSION['code'] = "error";
+        header("Location: /E-commerce/public/register");
+        exit();
+    }
 
-if($checkEmail && mysqli_num_rows($checkEmail) > 0 ) {
-    
+    // ======================
+    // PASSWORD MATCH CHECK
+    // ======================
+    if($password !== $confirmPassword){
+        $_SESSION['message'] = "Password does not match";
+        $_SESSION['code'] = "error";
+        header("Location: /E-commerce/public/register");
+        exit();
+    }
 
-    $_SESSION['old_firstName'] = $_POST['firstName'];
-    $_SESSION['old_lastName'] = $_POST['lastName'];
-    $_SESSION['old_middleName'] = $_POST['middleName'];
-    $_SESSION['old_email'] = $_POST['email'];
-    $_SESSION['old_contact'] = $_POST['contact'];
-    $_SESSION['old_username'] = $_POST['username'];
-    $_SESSION['old_street'] = $_POST['street'];
-    $_SESSION['old_barangay'] = $_POST['barangay'];
-    $_SESSION['old_city'] = $_POST['city'];
+    // ======================
+    // INSERT USER
+    // ======================
+    $query = "INSERT INTO users (
+                uuid,
+                firstName,
+                lastName,
+                middleName,
+                emailAddress,
+                contactNumber,
+                username,
+                password,
+                street,
+                barangay,
+                city,
+                role
+            )
+            VALUES (
+                '$uuid',
+                '$firstName',
+                '$lastName',
+                '$middleName',
+                '$emailAddress',
+                '$contactNumber',
+                '$username',
+                '$hashedPassword',
+                '$street',
+                '$barangay',
+                '$city',
+                '$role'
+            )";
 
+    if(mysqli_query($conn, $query)){
+        $_SESSION['message'] = "Registration successful. Login now.";
+        $_SESSION['code'] = "success";
+        header("Location: /E-commerce/public/login");
+        exit();
 
-
-    $_SESSION['message'] ="Email address already exist";
-    $_SESSION['code'] = "error";
-    header("Location: /E-commerce/public/register");
-    exit();
-
-}
-
-// username validator //
-$checkUsername = mysqli_query($conn, "SELECT id FROM users WHERE username
-                            = '$username' LIMIT 1");
-if($checkUsername && mysqli_num_rows($checkUsername) > 0 ) {
-     $_SESSION['old_firstName'] = $_POST['firstName'];
-    $_SESSION['old_lastName'] = $_POST['lastName'];
-    $_SESSION['old_middleName'] = $_POST['middleName'];
-    $_SESSION['old_email'] = $_POST['email'];
-    $_SESSION['old_contact'] = $_POST['contact'];
-    $_SESSION['old_username'] = $_POST['username'];
-    $_SESSION['old_street'] = $_POST['street'];
-    $_SESSION['old_barangay'] = $_POST['barangay'];
-    $_SESSION['old_city'] = $_POST['city'];
-
-
-    $_SESSION['message'] ="username already exist";
-    $_SESSION['code'] = "error";
-    header("Location: /E-commerce/public/register");
-    exit();
-
-}
-
-// password checker
-if($password !== $confirmPassword) {
-
-    $_SESSION['old_firstName'] = $_POST['firstName'];
-    $_SESSION['old_lastName'] = $_POST['lastName'];
-    $_SESSION['old_middleName'] = $_POST['middleName'];
-    $_SESSION['old_email'] = $_POST['email'];
-    $_SESSION['old_contact'] = $_POST['contact'];
-    $_SESSION['old_username'] = $_POST['username'];
-    $_SESSION['old_street'] = $_POST['street'];
-    $_SESSION['old_barangay'] = $_POST['barangay'];
-    $_SESSION['old_city'] = $_POST['city'];
-
-    $_SESSION['message'] ="password does not match";
-    $_SESSION['code'] = "error";
-    header("Location: /E-commerce/public/register");
-    exit();
-
-}
-
-//add user or insert user
-$query = "INSERT INTO `users`( `uuid`, `firstName`, `lastName`, `middleName`, `emailAddress`, `contactNumber`, `username`
-, `password`, `street`, `barangay`, `city`, `role`) 
-
-VALUES ('$uuid', '$firstName', '$lastName', '$middleName', '$emailAddress', '$contactNumber', '$username', '$password',
- '$street', '$barangay', '$city', '$role')";
-
- if(mysqli_query($conn, $query)){
-
-    unset($_SESSION['old_firstName']);
-    unset($_SESSION['old_lastName']);
-    unset($_SESSION['old_middleName']);
-    unset($_SESSION['old_email']);
-    unset($_SESSION['old_contact']);
-    unset($_SESSION['old_username']);
-    unset($_SESSION['old_street']);
-    unset($_SESSION['old_barangay']);
-    unset($_SESSION['old_city']);
-
-    $_SESSION['message'] = "Registration Successful. Login now g";
-    $_SESSION['code']= "success";
-    header("Location: /E-commerce/public/login");
-exit();
- }else {
-    $_SESSION['message'] ="something went wrong";
-    $_SESSION['code'] = "error";
-    header("Location: /E-commerce/public/register");
-    exit();
-
-}
-
+    } else {
+        $_SESSION['message'] = "Something went wrong";
+        $_SESSION['code'] = "error";
+        header("Location: /E-commerce/public/register");
+        exit();
+    }
 }
 
 ?>

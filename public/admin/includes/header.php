@@ -24,6 +24,14 @@
 <link rel="stylesheet" href="/E-commerce/public/assets/css/receipt.css">
 <link rel="stylesheet" href="/E-commerce/public/assets/css/aboutUs.css">
 <link rel="stylesheet" href="/E-commerce/public/assets/css/contactUs.css">
+<link rel="stylesheet" href="/E-commerce/public/assets/css/dashboardAdmin.css">
+<link rel="stylesheet" href="/E-commerce/public/assets/css/sidebars.css">
+<link rel="stylesheet" href="/E-commerce/public/assets/css/adminOrders.css">
+<link rel="stylesheet" href="/E-commerce/public/assets/css/customerAdmin.css">
+<link rel="stylesheet" href="/E-commerce/public/assets/css/adminProduct.css">
+<link rel="stylesheet" href="/E-commerce/public/assets/css/customerHistory.css">
+<link rel="stylesheet" href="/E-commerce/public/assets/css/changelog.css">
+
 
 
 
